@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dhu.public_service.dao.IRecordDao">
+
+    <select id="findRecordById" resultType="com.dhu.public_service.model.Record">
+        select r.`id`, `sid`, `reference`, `time`, `place`, `hour`, `type`, `uid`, r.`datetime`,
+               s.`name` as `sname`, u.`name` as `uname`
+            from `record` as r, `user` as s, `user` as u
+            where `id` = #{id} and `sid` = s.`id` and `uid` = u.`id`;
+    </select>
+
+    <select id="listRecords" resultType="com.dhu.public_service.model.Record">
+        select r.`id`, `sid`, `reference`, `time`, `place`, `hour`, `type`, `uid`, r.`datetime`,
+               s.`name` as `sname`, u.`name` as `uname`
+            from `record` as r, `user` as s, `user` as u
+            where `sid` = s.`id` and `uid` = u.`id`
+                and (#{alltime} or `time` between #{tbegin} and #{tend})
+                and (#{alltype} or `type` = #{type});
+    </select>
+
+    <select id="findRecordsBySid" resultType="com.dhu.public_service.model.Record">
+        select r.`id`, `sid`, `reference`, `time`, `place`, `hour`, `type`, `uid`, r.`datetime`,
+               s.`name` as `sname`, u.`name` as `uname`
+            from `record` as r, `user` as s, `user` as u
+            where `sid` = #{sid} and `sid` = s.`id` and `uid` = u.`id`
+                and (#{alltime} or `time` between #{tbegin} and #{tend})
+                and (#{alltype} or `type` = #{type});
+    </select>
+
+    <select id="findRecordsByUid" resultType="com.dhu.public_service.model.Record">
+        select r.`id`, `sid`, `reference`, `time`, `place`, `hour`, `type`, `uid`, r.`datetime`,
+               s.`name` as `sname`, u.`name` as `uname`
+            from `record` as r, `user` as s, `user` as u
+            where `uid` = #{uid} and `sid` = s.`id` and `uid` = u.`id`
+                and (#{alltime} or `time` between #{tbegin} and #{tend})
+                and (#{alltype} or `type` = #{type});
+    </select>
+
+    <insert id="createRecord" parameterType="com.dhu.public_service.model.Record">
+        insert into `record` (`sid`, `reference`, `time`, `place`, `hour`, `type`, `uid`)
+                      values (#{sid}, #{reference}, #{time}, #{place}, #{hour}, #{type}, #{uid});
+    </insert>
+
+    <update id="updateRecord" parameterType="com.dhu.public_service.model.Record">
+        update `record` set `sid` = #{sid}, `reference` = #{reference},
+                            `time` = #{time}, `place` = #{place},
+                            `hour` = #{hour}, `type` = #{type},
+                            `uid` = #{uid}
+                        where `id` = #{id};
+    </update>
+
+    <delete id="deleteRecord">
+        delete from `record` where `id` = #{id};
+    </delete>
+
+</mapper>

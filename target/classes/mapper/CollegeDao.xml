@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dhu.public_service.dao.ICollegeDao">
+
+    <select id="findCollegeById" resultType="com.dhu.public_service.model.College">
+        select * from `college` where `id` = #{id};
+    </select>
+
+    <select id="findCollegeByName" resultType="com.dhu.public_service.model.College">
+        select * from `college` where `name` = #{name};
+    </select>
+
+    <select id="listColleges" resultType="com.dhu.public_service.model.College">
+        select * from `college`;
+    </select>
+
+    <select id="findCollegeIdsByTid" resultType="Integer">
+        select `id` from `college` where `tid` = #{tid};
+    </select>
+
+    <select id="findCollegeIdsBySid" resultType="Integer">
+        select `id` from `college` where `sid` = #{sid};
+    </select>
+
+    <insert id="createCollege" parameterType="com.dhu.public_service.model.College">
+        insert into `college` (`name`, `tid`) values (#{name}, #{tid});
+    </insert>
+
+    <update id="updateCollege" parameterType="com.dhu.public_service.model.College">
+        update `college` set `name` = #{name}, `sid` = #{sid}, `tid` = #{tid} where `id` = #{id};
+    </update>
+
+    <delete id="deleteCollege">
+        delete from `college` where `id` = #{id};
+    </delete>
+
+</mapper>

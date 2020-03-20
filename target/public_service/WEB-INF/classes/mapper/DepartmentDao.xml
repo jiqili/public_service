@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dhu.public_service.dao.IDepartmentDao">
+
+    <select id="findDepartmentById" resultType="com.dhu.public_service.model.Department">
+        select d.`id`, d.`name`, d.`sid`, `cid`, c.`name` as `cname`
+            from `department` as d, `college` as c
+            where d.`id` = #{id} and `cid` = c.`id`;
+    </select>
+
+    <select id="findDepartmentByCidAndName" resultType="com.dhu.public_service.model.Department">
+        select d.`id`, d.`name`, d.`sid`, `cid`, c.`name` as `cname`
+            from `college` as c, `department` as d
+            where c.`id` = #{cid} and c.`id` = `cid` and d.`name` = #{name};
+    </select>
+
+    <select id="listDepartments" resultType="com.dhu.public_service.model.Department">
+        select d.`id`, d.`name`, d.`sid`, `cid`, c.`name` as `cname`
+            from `department` as d, `college` as c
+            where `cid` = c.`id`;
+    </select>
+
+    <select id="findDepartmentsByCid" resultType="com.dhu.public_service.model.Department">
+        select d.`id`, d.`name`, d.`sid`, `cid`, c.`name` as `cname`
+            from `college` as c, `department` as d
+            where c.`id` = #{cid} and c.`id` = `cid`;
+    </select>
+
+    <select id="findDepartmentIdsByCid" resultType="Integer">
+        select `id` from `department` where `cid` = #{cid};
+    </select>
+
+    <select id="findDepartmentIdsBySid" resultType="Integer">
+        select `id` from `department` where `sid` = #{sid};
+    </select>
+
+    <insert id="createDepartment" parameterType="com.dhu.public_service.model.Department">
+        insert into `department` (`name`, `cid`) values (#{name}, #{cid});
+    </insert>
+
+    <update id="updateDepartment" parameterType="com.dhu.public_service.model.Department">
+        update `department` set `name` = #{name}, `sid` = #{sid}, `cid` = #{cid} where `id` = #{id};
+    </update>
+
+    <delete id="deleteDepartment">
+        delete from `department` where `id` = #{id};
+    </delete>
+
+</mapper>

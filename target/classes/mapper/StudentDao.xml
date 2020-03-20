@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dhu.public_service.dao.IStudentDao">
+
+    <select id="findStudentById" resultType="com.dhu.public_service.model.Student">
+        select s.`id`, `sclass`, `did`, s.`datetime`, `level`, `phone`,
+               `number`, u.`name`, `status`,
+               `cid`, c.`name` as `cname`, d.`name` as `dname`,
+               coalesce(`sum`, 0) as `sum`
+            from
+                (`student` as s left join (
+                    select `sid`, coalesce(sum(`hour`), 0) as `sum`
+                        from `record`
+                        where #{alltime} or `time` between #{tbegin} and #{tend}
+                        group by `sid`
+                ) as r on s.`id` = r.`sid`),
+                `user` as u, `department` as d, `college` as c
+            where s.`id` = #{id} and s.`id` = u.`id` and `did` = d.`id` and `cid` = c.`id`;
+    </select>
+
+    <select id="listStudents" resultType="com.dhu.public_service.model.Student">
+        select s.`id`, `sclass`, `did`, s.`datetime`, `level`, `phone`,
+               `number`, u.`name`, `status`,
+               `cid`, c.`name` as `cname`, d.`name` as `dname`,
+               coalesce(`sum`, 0) as `sum`
+            from
+                (`student` as s left join (
+                    select `sid`, coalesce(sum(`hour`), 0) as `sum`
+                        from `record`
+                        where #{alltime} or `time` between #{tbegin} and #{tend}
+                        group by `sid`
+                ) as r on s.`id` = r.`sid`),
+                `user` as u, `department` as d, `college` as c
+            where (#{allstatus} or `status` = #{status}) and s.`id` = u.`id` and `did` = d.`id` and `cid` = c.`id`;
+    </select>
+
+    <select id="findStudentsByDid" resultType="com.dhu.public_service.model.Student">
+        select s.`id`, `sclass`, `did`, s.`datetime`, `level`, `phone`,
+               `number`, u.`name`, `status`,
+               `cid`, c.`name` as `cname`, d.`name` as `dname`,
+               coalesce(`sum`, 0) as `sum`
+            from
+                (`student` as s left join (
+                    select `sid`, coalesce(sum(`hour`), 0) as `sum`
+                        from `record`
+                        where #{alltime} or `time` between #{tbegin} and #{tend}
+                        group by `sid`
+                ) as r on s.`id` = r.`sid`),
+                `user` as u, `department` as d, `college` as c
+            where d.`id` = #{did} and (#{allstatus} or `status` = #{status}) and s.`id` = u.`id` and `did` = d.`id` and `cid` = c.`id`;
+    </select>
+
+    <select id="findStudentsByCid" resultType="com.dhu.public_service.model.Student">
+        select s.`id`, `sclass`, `did`, s.`datetime`, `level`, `phone`,
+               `number`, u.`name`, `status`,
+               `cid`, c.`name` as `cname`, d.`name` as `dname`,
+               coalesce(`sum`, 0) as `sum`
+            from
+                (`student` as s left join (
+                    select `sid`, coalesce(sum(`hour`), 0) as `sum`
+                        from `record`
+                        where #{alltime} or `time` between #{tbegin} and #{tend}
+                        group by `sid`
+                ) as r on s.`id` = r.`sid`),
+                `user` as u, `department` as d, `college` as c
+            where c.`id` = #{cid} and (#{allstatus} or `status` = #{status}) and s.`id` = u.`id` and `did` = d.`id` and `cid` = c.`id`;
+    </select>
+
+    <select id="findStudentIdsByDid" resultType="Integer">
+        select `id` from `student` where `did` = #{did};
+    </select>
+
+    <select id="findStudentIdsByCid" resultType="Integer">
+        select s.`id` from `department` as d, `student` as s
+            where `cid` = #{cid} and d.`id` = `did`;
+    </select>
+
+    <insert id="createStudent" parameterType="com.dhu.public_service.model.Student">
+        insert into `student` (`id`, `sclass`, `did`, `datetime`, `level`, `phone`)
+                       values (#{id}, #{sclass}, #{did}, #{datetime}, #{level}, #{phone});
+    </insert>
+
+    <update id="updateStudent" parameterType="com.dhu.public_service.model.Student">
+        update `student` set `sclass` = #{sclass}, `did` = #{did}, `datetime` = #{datetime}, `level` = #{level}, `phone` = #{phone} where `id` = #{id};
+    </update>
+
+</mapper>
