@@ -1,6 +1,7 @@
 # public_service
 
 > A Vue.js project
+>工时管理系统前端代码，用了vue框架和elementui
 
 ## Build Setup
 
